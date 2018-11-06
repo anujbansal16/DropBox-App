@@ -1,6 +1,34 @@
-
-
-<!-- block control statement is used to define the place where the derived templates can insert themselves
-
-Blocks are given a unique name and content can enhanced/replaced in derived templates
- -->
+<table class="table table-hover" style="font-size: 15px;text-align: left;">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th colspan="3">File Name</th>
+                        <th>File Size</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in myfiles %}
+                    <tr>
+                        <td>
+                            {% if file.isFolder %}
+                                <a style="color: #000"><i class="fa fa-folder"></i></a>
+                            {% else %}
+                                <a style="color: #000"><i class="fa fa-file"></i></a>
+                            {% endif %}
+                        </td>
+                        <td colspan="3">{{file.name}}</td>
+                        <td>{{file.size}}</td>
+                        <td>
+                            {% if file.isPublic %}
+                                <a style="color: green"><i class="fa fa-user"></i></a>
+                            {% else %}
+                                <a style="color: green"><i class="fa fa-user"></i></a>
+                            {% endif %}
+                            <!-- <a class="teal-text"><i class="fa fa-pencil"></i></a> -->
+                            <a style="color: red;margin-left: 10px"><i class="fa fa-times"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>

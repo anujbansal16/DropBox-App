@@ -441,7 +441,7 @@ Sidebar
   transform: translateY(-50%);
   height: 16px;
   width: 16px;
-  background: url(/static/images/cd-nav-icons.svg) no-repeat 0 0;
+  /*background: url(/static/images/cd-nav-icons.svg) no-repeat 0 0;*/
 }
 .cd-side-nav > ul > li.overview > a::before {
   background-position: -64px 0;

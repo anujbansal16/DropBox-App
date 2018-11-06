@@ -63,7 +63,7 @@ jQuery(document).ready(function(){
 
 	$(document).on('click', function(event){
 		if( !$(event.target).is('.has-children a') ) {
-			sidebar.find('.has-children.selected').removeClass('selected');
+			// sidebar.find('.has-children.selected').removeClass('selected');
 			accountInfo.removeClass('selected');
 		}
 	});
@@ -127,4 +127,25 @@ jQuery(document).ready(function(){
 		}
 		scrolling = false;
 	}
+	$("#createF").on('click',function() {
+		fName=$("folderName").val()
+		$.post("/createFolder",{folderName: fName },function(data){
+					alert(data);
+					$('content-wrapper').html(data);
+		});
+		// $.ajax({
+	 //      type: 'POST',
+	 //      url: "/createFolder",
+	 //      data: {folderName: fName },
+	 //      dataType: "text",
+	 //      success: function(data){
+		// 			alert(data);
+		// 			$('content-wrapper').html(data);
+	 //               }
+	 //    });
+	});
+
+
+
+
 });

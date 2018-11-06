@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
-
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='fonts/font-awesome-4.7.0/css/font-awesome.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/reset.css')}}"> <!-- CSS reset -->
     <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}"> <!-- Resource style -->
-    <script src="{{url_for('static',filename='js/modernizr.js')}}"></script> <!-- Modernizr -->aa
+    <script src="{{url_for('static',filename='js/modernizr.js')}}"></script> <!-- Modernizr -->
     <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}"> -->
     <title>Welcome to Dropbox</title>
 </head>
@@ -29,8 +29,7 @@
                 <li><a href="#0">Support</a></li>
                 <li class="has-children account">
                     <a href="#0">
-                        <img src="{{url_for('static',filename='images/cd-avatar.png')}}" alt="avatar">
-                        Account
+                        {{user.name}}
                     </a>
 
                     <ul>
@@ -49,7 +48,7 @@
             <ul>
                 <li class="cd-label">Main</li>
                 <li class="has-children overview">
-                    <a href="#0">Overview</a>
+                    <a href="#0"><i style="font-size: 15px" class="fa fa-file"></i> &nbsp;Upload Files</a>
                     
                     <!-- <ul>
                         <li><a href="#0">All Data</a></li>
@@ -68,13 +67,16 @@
                 </li> -->
 
                 <li class="has-children comments">
-                    <a href="#0">Comments</a>
-                    
-                    <!-- <ul>
-                        <li><a href="#0">All Comments</a></li>
-                        <li><a href="#0">Edit Comment</a></li>
-                        <li><a href="#0">Delete Comment</a></li>
-                    </ul> -->
+                    <a href="#0"><i style="font-size: 15px" class="fa fa-folder"></i> &nbsp;Create Folder</a>
+                    <ul>
+                            <li style="padding: 15px;text-align: center;">Enter folder name
+                                <input id="folderName" style="width: 100%;margin-top: 10px;margin-left: 0px;display: block;" type="text" >
+                            </li>
+                            <li style="padding-top: 0px;padding-bottom : 15px;padding-right: 15px;padding-left: 15px" 
+                            class="action-btn"><a id="createF" style="background: #73cdf4;margin:0px">+ Create</a></li>
+                        <!-- <li><a href="#0">Edit Comment</a></li> -->
+                        <!-- <li><a href="#0">Delete Comment</a></li> -->
+                    </ul>
                 </li>
             </ul>
 
@@ -116,35 +118,39 @@
         </nav>
 
         <div class="content-wrapper" style="padding-left: 10px">
-           
-            <table class="table table-hover" style="font-size: 15px;text-align: center;">
+            <table class="table table-hover" style="font-size: 15px;text-align: left;">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th colspan="3">File Name</th>
+                        <th>File Size</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for file in myfiles %}
                     <tr>
                         <td>
-                            <fieldset class="form-group">
-                                <input type="checkbox" id="checkbox1">
-                                <label for="checkbox1"></label>
-                            </fieldset>
+                            {% if file.isFolder %}
+                                <a style="color: #000"><i class="fa fa-folder"></i></a>
+                            {% else %}
+                                <a style="color: #000"><i class="fa fa-file"></i></a>
+                            {% endif %}
                         </td>
-                        <td>Ashley</td>
-                        <td>Lynwood</td>
-                        <td>@ashow</td>
+                        <td colspan="3">{{file.name}}</td>
+                        <td>{{file.size}}</td>
                         <td>
-                            <a class="blue-text"><i class="fa fa-user"></i></a>
-                            <a class="teal-text"><i class="fa fa-pencil"></i></a>
-                            <a class="red-text"><i class="fa fa-times"></i></a>
+                            {% if file.isPublic %}
+                                <a style="color: green"><i class="fa fa-user"></i></a>
+                            {% else %}
+                                <a style="color: green"><i class="fa fa-user"></i></a>
+                            {% endif %}
+                            <!-- <a class="teal-text"><i class="fa fa-pencil"></i></a> -->
+                            <a style="color: red;margin-left: 10px"><i class="fa fa-times"></i></a>
                         </td>
                     </tr>
-                    <tr>
+                    {% endfor %}
+<!--                     <tr>
                         <td>
                             <fieldset class="form-group">
                                 <input type="checkbox" id="checkbox2">
@@ -159,23 +165,7 @@
                             <a class="teal-text"><i class="fa fa-pencil"></i></a>
                             <a class="red-text"><i class="fa fa-times"></i></a>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <fieldset class="form-group">
-                                <input type="checkbox" id="checkbox3">
-                                <label for="checkbox3"></label>
-                            </fieldset>
-                        </td>
-                        <td>Ariel</td>
-                        <td>Macy</td>
-                        <td>@arielsea</td>
-                        <td>
-                            <a class="blue-text"><i class="fa fa-user"></i></a>
-                            <a class="teal-text"><i class="fa fa-pencil"></i></a>
-                            <a class="red-text"><i class="fa fa-times"></i></a>
-                        </td>
-                    </tr>
+                    </tr> -->
 
                 </tbody>
             </table>
