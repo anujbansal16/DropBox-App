@@ -3,6 +3,7 @@ import sqlite3
 from flask_sqlalchemy import SQLAlchemy
 # Creates the application object 
 app = Flask(__name__)
+app.secret_key="qoadasmadadsakjadsadjk"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db=SQLAlchemy(app)

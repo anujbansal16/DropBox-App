@@ -128,24 +128,39 @@ jQuery(document).ready(function(){
 		scrolling = false;
 	}
 	$("#createF").on('click',function() {
-		fName=$("folderName").val()
-		$.post("/createFolder",{folderName: fName },function(data){
-					alert(data);
-					$('content-wrapper').html(data);
+		fName=$("#folderName").val();
+		$.post("/createFolder",{name: fName},function(result){
+					if (result.error){
+						alert(result.data);
+					}
+					else
+						$('.content-wrapper').html(result.data);
 		});
-		// $.ajax({
-	 //      type: 'POST',
-	 //      url: "/createFolder",
-	 //      data: {folderName: fName },
-	 //      dataType: "text",
-	 //      success: function(data){
-		// 			alert(data);
-		// 			$('content-wrapper').html(data);
-	 //               }
-	 //    });
 	});
 
-
-
-
+	
 });
+function openFolder(x){
+		$("#back").css("display","inline-block");
+       $.post("/openFolder",{folderName: x},function(result){
+					if (result.error){
+						alert(result.data);
+					}
+					else
+						$('.content-wrapper').html(result.data);
+		}); 
+
+ }
+
+ function goBack() {
+	$.get("/goBack",function(result){
+					if (result.error){
+						alert(result.data);
+					}
+					else{
+						if(result.path=="/")
+							$("#back").css("display","none");
+						$('.content-wrapper').html(result.data);
+					}
+		});  	
+ }

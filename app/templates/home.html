@@ -8,35 +8,34 @@
     <link rel="stylesheet" href="{{url_for('static',filename='css/reset.css')}}"> <!-- CSS reset -->
     <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}"> <!-- Resource style -->
     <script src="{{url_for('static',filename='js/modernizr.js')}}"></script> <!-- Modernizr -->
-    <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}"> -->
     <title>Welcome to Dropbox</title>
 </head>
 <body>
     <header class="cd-main-header">
-        <a href="#0" class="cd-logo" style="margin-top: 1%;font-weight: 500;font-size: 30px;text-decoration: none; color: white">DropBox</a>
+        <a href="#" class="cd-logo" style="margin-top: 1%;font-weight: 500;font-size: 30px;text-decoration: none; color: white">DropBox</a>
         
         <div class="cd-search is-hidden">
-            <form action="#0">
+            <form action="#">
                 <input type="search" placeholder="Search...">
             </form>
         </div> <!-- cd-search -->
 
-        <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+        <a href="#" class="cd-nav-trigger">Menu<span></span></a>
 
         <nav class="cd-nav">
             <ul class="cd-top-nav">
-                <li><a href="#0">Tour</a></li>
-                <li><a href="#0">Support</a></li>
+                <!-- <li><a href="#">Tour</a></li> -->
+                <li id="back" style="display: none"><a href="#" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</a></li>
                 <li class="has-children account">
-                    <a href="#0">
-                        {{user.name}}
+                    <a href="#">
+                        {{session["username"].upper()}}
                     </a>
 
                     <ul>
 
-                        <li><a href="#0">My Account</a></li>
-                        <li><a href="#0">Edit Account</a></li>
-                        <li><a href="#0">Logout</a></li>
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">Edit Account</a></li>
+                        <li><a href="{{url_for('logout')}}">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -48,34 +47,34 @@
             <ul>
                 <li class="cd-label">Main</li>
                 <li class="has-children overview">
-                    <a href="#0"><i style="font-size: 15px" class="fa fa-file"></i> &nbsp;Upload Files</a>
+                    <a href="#"><i style="font-size: 15px" class="fa fa-file"></i> &nbsp;Upload Files</a>
                     
                     <!-- <ul>
-                        <li><a href="#0">All Data</a></li>
-                        <li><a href="#0">Category 1</a></li>
-                        <li><a href="#0">Category 2</a></li>
+                        <li><a href="#">All Data</a></li>
+                        <li><a href="#">Category 1</a></li>
+                        <li><a href="#">Category 2</a></li>
                     </ul> -->
                 </li>
                 <!-- <li class="has-children notifications active">
-                    <a href="#0">Notifications<span class="count">3</span></a>
+                    <a href="#">Notifications<span class="count">3</span></a>
                     
                     <ul>
-                        <li><a href="#0">All Notifications</a></li>
-                        <li><a href="#0">Friends</a></li>
-                        <li><a href="#0">Other</a></li>
+                        <li><a href="#">All Notifications</a></li>
+                        <li><a href="#">Friends</a></li>
+                        <li><a href="#">Other</a></li>
                     </ul>
                 </li> -->
 
                 <li class="has-children comments">
-                    <a href="#0"><i style="font-size: 15px" class="fa fa-folder"></i> &nbsp;Create Folder</a>
+                    <a href="#"><i style="font-size: 15px" class="fa fa-folder"></i> &nbsp;Create Folder</a>
                     <ul>
                             <li style="padding: 15px;text-align: center;">Enter folder name
                                 <input id="folderName" style="width: 100%;margin-top: 10px;margin-left: 0px;display: block;" type="text" >
                             </li>
                             <li style="padding-top: 0px;padding-bottom : 15px;padding-right: 15px;padding-left: 15px" 
                             class="action-btn"><a id="createF" style="background: #73cdf4;margin:0px">+ Create</a></li>
-                        <!-- <li><a href="#0">Edit Comment</a></li> -->
-                        <!-- <li><a href="#0">Delete Comment</a></li> -->
+                        <!-- <li><a href="#">Edit Comment</a></li> -->
+                        <!-- <li><a href="#">Delete Comment</a></li> -->
                     </ul>
                 </li>
             </ul>
@@ -83,37 +82,37 @@
             <ul>
                 <li class="cd-label">Secondary</li>
                 <li class="has-children bookmarks">
-                    <a href="#0">Bookmarks</a>
+                    <a href="#">Bookmarks</a>
                     
                     <!-- <ul>
-                        <li><a href="#0">All Bookmarks</a></li>
-                        <li><a href="#0">Edit Bookmark</a></li>
-                        <li><a href="#0">Import Bookmark</a></li>
+                        <li><a href="#">All Bookmarks</a></li>
+                        <li><a href="#">Edit Bookmark</a></li>
+                        <li><a href="#">Import Bookmark</a></li>
                     </ul> -->
                 </li>
                 <li class="has-children images">
-                    <a href="#0">Images</a>
+                    <a href="#">Images</a>
                     
                     <!-- <ul>
-                        <li><a href="#0">All Images</a></li>
-                        <li><a href="#0">Edit Image</a></li>
+                        <li><a href="#">All Images</a></li>
+                        <li><a href="#">Edit Image</a></li>
                     </ul> -->
                 </li>
 
                 <li class="has-children users">
-                    <a href="#0">Users</a>
+                    <a href="#">Users</a>
                     
                     <!-- <ul>
-                        <li><a href="#0">All Users</a></li>
-                        <li><a href="#0">Edit User</a></li>
-                        <li><a href="#0">Add User</a></li>
+                        <li><a href="#">All Users</a></li>
+                        <li><a href="#">Edit User</a></li>
+                        <li><a href="#">Add User</a></li>
                     </ul> -->
                 </li>
             </ul>
 
             <ul>
                 <li class="cd-label">Action</li>
-                <li class="action-btn"><a href="#0">+ Button</a></li>
+                <li class="action-btn"><a href="#">+ Button</a></li>
             </ul>
         </nav>
 
@@ -122,7 +121,7 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th colspan="3">File Name</th>
+                        <th colspan="3">Name</th>
                         <th>File Size</th>
                         <th>Actions</th>
                     </tr>
@@ -130,14 +129,17 @@
                 <tbody>
                     {% for file in myfiles %}
                     <tr>
-                        <td>
-                            {% if file.isFolder %}
+                        {% if file.isFolder %}
+                            <td>
                                 <a style="color: #000"><i class="fa fa-folder"></i></a>
-                            {% else %}
+                            </td>
+                            <td colspan="3"><a href="#" onclick="openFolder('{{file.name}}')">{{file.name}}</a></td>
+                        {% else %}
+                            <td>
                                 <a style="color: #000"><i class="fa fa-file"></i></a>
-                            {% endif %}
-                        </td>
-                        <td colspan="3">{{file.name}}</td>
+                            </td>
+                            <td colspan="3"><a href="#">{{file.name}}</a></td>
+                        {% endif %}
                         <td>{{file.size}}</td>
                         <td>
                             {% if file.isPublic %}
@@ -178,5 +180,8 @@
 <script src="{{url_for('static',filename='js/jquery-2.1.4.js')}}"></script>
 <script src="{{url_for('static',filename='js/jquery.menu-aim.js')}}"></script>
 <script src="{{url_for('static',filename='js/main1.js')}}"></script> <!-- Resource jQuery -->
+<script>
+    
+</script>
 </body>
 </html>
