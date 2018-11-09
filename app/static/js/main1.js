@@ -138,11 +138,27 @@ jQuery(document).ready(function(){
 		});
 	});
 
+$('#search').on('keyup', function(e) {
+    if (e.keyCode === 13){
+        $.get("/search?name="+$(this).val(),function(result){
+					if (result.error){
+						alert(result.data);
+					}
+					else{
+						if(result.path=="/")
+							$("#back").css("display","none");
+						$('.content-wrapper').html(result.data);
+					}
+		});  	
+    }
+});
+
 	
 });
-function openFolder(x){
+function openFolder(x,e){
 		$("#back").css("display","inline-block");
-       $.post("/openFolder",{folderName: x},function(result){
+		path=e.target.getAttribute("data-path");
+       $.post("/openFolder",{folderName: x, parentPath: path},function(result){
 					if (result.error){
 						alert(result.data);
 					}
@@ -164,3 +180,4 @@ function openFolder(x){
 					}
 		});  	
  }
+

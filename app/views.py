@@ -28,6 +28,10 @@ def getCurrentUserFiles():
 	files=Files.query.filter(and_(Files.username==session["username"],Files.parent==session["path"])).order_by(Files.name)
 	return jsonify({'data': render_template('files.html', myfiles=files),'path':session["path"]})
 
+def searchFiles(fileName):
+	files=Files.query.filter(and_(Files.username==session["username"],Files.name.like("%"+fileName+"%"))).order_by(Files.name)
+	return jsonify({'data': render_template('files.html', myfiles=files),'path':session["path"]})
+
 @app.route('/index')
 @app.route('/')
 def index():
@@ -98,7 +102,9 @@ def openFolder():
 	if isLoggedIn():
 		folderName=request.form["folderName"].strip()
 		if folderName:
-			session["path"]=session["path"]+folderName+"/"
+			session["path"]=request.form["parentPath"].strip()+folderName+"/"
+			print(session["path"])
+			# session["path"]=session["path"]+folderName+"/"
 		return getCurrentUserFiles()
 	return jsonify({'data':"Something went wrong",'error':True})		
 
@@ -113,6 +119,17 @@ def goBack():
 			return getCurrentUserFiles()
 
 	return jsonify({'data':"Something went wrong",'error':True})
+
+@app.route("/search",methods=['GET'])
+def search():
+	if isLoggedIn():
+		fName=request.args.get("name").strip();
+		if not(fName):
+			return jsonify({'data':"Please Provide some name",'error':True})
+		else:
+			return searchFiles(fName)
+	return jsonify({'data':"Something went wrong",'error':True})	
+	
 	
 
 def register(request):
