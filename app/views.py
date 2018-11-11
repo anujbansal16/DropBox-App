@@ -1,10 +1,12 @@
+import os
+import time
 from flask import render_template
 from sqlalchemy import and_
 from sqlalchemy import desc
 import hashlib 
 from flask import url_for, redirect, request, make_response,flash
 from app.models import Users,Files
-from app import app
+from app import app,APP_ROOT,uploadFolder
 import utility
 from app import db
 from flask import jsonify
@@ -25,12 +27,20 @@ def getCurrentUser():
 	return Users.query.filter_by(username=session["username"]).first()
 
 def getCurrentUserFiles():
-	files=Files.query.filter(and_(Files.username==session["username"],Files.parent==session["path"])).order_by(Files.name)
+	files=Files.query.filter(and_(Files.username==session["username"],Files.parent==session["path"])).order_by(Files.name).all()
 	return jsonify({'data': render_template('files.html', myfiles=files),'path':session["path"]})
 
 def searchFiles(fileName):
-	files=Files.query.filter(and_(Files.username==session["username"],Files.name.like("%"+fileName+"%"))).order_by(Files.name)
-	return jsonify({'data': render_template('files.html', myfiles=files),'path':session["path"]})
+	
+	files=Files.query.filter(and_(Files.isPublic==True,Files.isFolder==False,Files.name.like("%"+fileName+"%"))).order_by(Files.name).all()
+	filesPrv=Files.query.filter(and_(Files.username==session["username"],Files.isPublic==False,Files.name.like("%"+fileName+"%"))).order_by(Files.name).all()
+	files=files+filesPrv	
+	if files:
+		print(files)
+		return jsonify({'data': render_template('files.html', myfiles=files),'path':session["path"]})
+	else:
+		return jsonify({'data': "<h1>No results found for "+fileName+"</h1>"})
+
 
 @app.route('/index')
 @app.route('/')
@@ -130,6 +140,28 @@ def search():
 			return searchFiles(fName)
 	return jsonify({'data':"Something went wrong",'error':True})	
 	
+@app.route("/upload",methods=['POST'])
+def upload():
+	if isLoggedIn:
+		if request.method =='POST':
+			for key, file in request.files.items():
+				currentT=time.time()
+				currentT=str(currentT)
+				oFileName=file.filename
+				filename = file.filename+currentT
+				fileD=Files(oFileName,session['username'],session['path'],11,0,0)
+				print("-----------------------------")
+				print(filename)	
+				try:
+					db.session.add(fileD)
+					db.session.commit()
+					file.save(os.path.join(APP_ROOT+"/"+uploadFolder+"/", filename))
+				except Exception as e:
+					if 'IntegrityError' in str(e):
+						return jsonify({'data':"File already exist (delete exising file first)",'error':True})
+					return jsonify({'data':str(e),'error':True})
+		return getCurrentUserFiles()
+	return jsonify({'data':"Error:Something went wrong",'error':True})	
 	
 
 def register(request):

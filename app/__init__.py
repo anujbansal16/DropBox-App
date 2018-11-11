@@ -1,10 +1,12 @@
 from flask import Flask
 import sqlite3
 from flask_sqlalchemy import SQLAlchemy
+import os
 # Creates the application object 
 app = Flask(__name__)
 app.secret_key="qoadasmadadsakjadsadjk"
-
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+uploadFolder="files"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db=SQLAlchemy(app)
 from app import models
