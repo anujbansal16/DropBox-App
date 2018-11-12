@@ -1,5 +1,7 @@
-<h1 style="padding-top: 10px;padding-bottom: 10px;font-weight: 500">{{session["path"]}}</h1>
-  <table class="table table-hover table-bordered" style="font-size: 15px;text-align: center;">
+<h2 style="text-align: right;padding: 5px;font-weight: 1000">Drive Usage:  {{session["totalSize"]}}</h2>
+            <h1 style="padding-top: 10px;padding-bottom: 10px;font-weight: 500">
+            {{session["path"]}}</h1>
+            <table class="table table-hover table-bordered" style="font-size: 15px;text-align: center;">
                 <thead>
                     <tr style="font-weight: 800">
                         <th></th>
@@ -24,7 +26,7 @@
                             <td ><a href="#">{{file.name}}</a></td>
                         {% endif %}
                         <td>{{file.username}}</td>
-                        <td>{{file.size}}</td>
+                        <td>{{file.humanReadableSize}}</td>
                         <td>
                           {% if session["username"]==file.username %}
                            <a href="#!" data-dz-remove class="btn-floating ph red white-text waves-effect waves-light"><i class="fa fa-times white-text"></i></i></a>
@@ -33,17 +35,16 @@
                             {% if not file.isFolder %}
                              {% if session["username"]==file.username %}
                                 {% if file.isPublic %}
-                                <a style="background-color: green" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-user white-text"></i></i></a>
+                                <a onclick="changeMe('{{file.name}}',event)" style="background-color: green" href="javascript:void(0)" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i data-path="{{file.parent}}" class="fa fa-user white-text"></i></i></a>
                                     <!-- <a href="#" style="color: green;margin-left: 10px;"><i class="fa fa-user"></i></a> -->
                                 {% else %}
-                                <a style="background-color: orange" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-lock white-text"></i></i></a>
+                                <a onclick="changeMe('{{file.name}}',event)" style="background-color: orange" href="javascript:void(0)" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i data-path="{{file.parent}}" class="fa fa-lock white-text"></i></i></a>
                                     <!-- <a href="#" style="color: orange;margin-left: 10px;"><i class="fa fa-user"></i></a> -->
                                 {% endif %}
                             {% endif %}
                                 <a style="background-color: green" href="{{url_for('download',fname=file.name,parentPath=file.parent,owner=file.username)}}" class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-cloud-download white-text" ></i></i></a>
                                 <!-- <a href="#" style="color: black;margin-left: 10px;"><i class="fa fa-cloud-download"></i></a> -->
                                 <!-- <a href="#" style="color: black;"><i class="fa fa-file-text"></i></a> -->
-                                <a style="background-color: green" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-file-text white-text"></i></i></a>
                             {% endif %}
                             <!-- <a class="teal-text"><i class="fa fa-pencil"></i></a> -->
                         </td>
