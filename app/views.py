@@ -110,6 +110,27 @@ def createFolder():
 		return getCurrentUserFiles()
 	return redirect(url_for('index'))
 
+
+@app.route("/delete_data",methods=['POST'])
+def delete_data():
+	name = request.form['name']
+	parent = request.form['parentPath']
+	username = session['username']
+	data = Files.query.filter(and_(Files.name == name, Files.username == username, Files.parent == parent)).first()
+	print(APP_ROOT)
+	try:
+		db.session.delete(data)
+		db.session.commit()
+		os.remove(APP_ROOT + "/files/" + data.nameWithTS)
+	except:
+		print("Data not fount" + name + parent + username)
+	return getCurrentUserFiles()
+
+
+#def delete_recurse(folder_name):
+
+
+
 @app.route("/openFolder",methods=['POST'])
 def openFolder():
 	if isLoggedIn():

@@ -154,7 +154,7 @@
                         <td>{{file.size}}</td>
                         <td>
                           {% if session["username"]==file.username %}
-                           <a href="#!" data-dz-remove class="btn-floating ph red white-text waves-effect waves-light"><i class="fa fa-times white-text"></i></i></a>
+                           <a href="javascript:void(0)" onclick = "del_data('{{file.name}}','{{file.parent}}')" data-dz-remove class="btn-floating ph red white-text waves-effect waves-light"><i class="fa fa-times white-text"></i></i></a>
                           {% endif %}
 
                             {% if not file.isFolder %}
