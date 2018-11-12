@@ -163,11 +163,11 @@
                                 <a style="background-color: green" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-user white-text"></i></i></a>
                                     <!-- <a href="#" style="color: green;margin-left: 10px;"><i class="fa fa-user"></i></a> -->
                                 {% else %}
-                                <a style="background-color: orange" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-user white-text"></i></i></a>
+                                <a style="background-color: orange" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-lock white-text"></i></i></a>
                                     <!-- <a href="#" style="color: orange;margin-left: 10px;"><i class="fa fa-user"></i></a> -->
                                 {% endif %}
                             {% endif %}
-                                <a style="background-color: green" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-cloud-download white-text"></i></i></a>
+                                <a style="background-color: green" href="{{url_for('download',fname=file.name,parentPath=file.parent,owner=file.username)}}" class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-cloud-download white-text" ></i></i></a>
                                 <!-- <a href="#" style="color: black;margin-left: 10px;"><i class="fa fa-cloud-download"></i></a> -->
                                 <!-- <a href="#" style="color: black;"><i class="fa fa-file-text"></i></a> -->
                                 <a style="background-color: green" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-file-text white-text"></i></i></a>

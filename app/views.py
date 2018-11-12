@@ -11,12 +11,14 @@ import utility
 from app import db
 from flask import jsonify
 from flask import session
+from flask import send_from_directory
 
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     return response
+
 
 def isLoggedIn():
 	if session.get('username'):
@@ -102,6 +104,7 @@ def createFolder():
 			db.session.commit()	
 		except Exception as e:
 			if 'IntegrityError' in str(e):
+				print(str(e))
 				return jsonify({'data':"Folder already exist",'error':True})
 			return jsonify({'data',str(e)})
 		return getCurrentUserFiles()
@@ -139,6 +142,24 @@ def search():
 		else:
 			return searchFiles(fName)
 	return jsonify({'data':"Something went wrong",'error':True})	
+
+@app.route("/download", methods=['GET'])
+def download():
+	if isLoggedIn():
+		fname=request.args.get("fname").strip()
+		if fname:
+			parentPath=request.args.get("parentPath").strip()
+			owner=request.args.get("owner").strip()
+			print("--------------------")
+			print(fname+" "+owner+" "+parentPath)
+			if owner==session["username"]:
+				myfile=Files.query.filter(and_(Files.name==fname,Files.username==owner,Files.parent==parentPath)).first()
+			else:
+				myfile=Files.query.filter(and_(Files.name==fname,Files.username==owner,Files.isPublic==True,Files.parent==parentPath)).first()
+			if myfile:
+				uploads = os.path.join(APP_ROOT+"/",uploadFolder+"/")
+				return send_from_directory(directory=uploads, filename=myfile.nameWithTS, as_attachment=True)
+	return redirect(url_for('index'))
 	
 @app.route("/upload",methods=['POST'])
 def upload():
@@ -148,8 +169,8 @@ def upload():
 				currentT=time.time()
 				currentT=str(currentT)
 				oFileName=file.filename
-				filename = file.filename+currentT
-				fileD=Files(oFileName,session['username'],session['path'],11,0,0)
+				filename =currentT+file.filename
+				fileD=Files(oFileName,session['username'],session['path'],11,0,0,filename)
 				print("-----------------------------")
 				print(filename)	
 				try:
