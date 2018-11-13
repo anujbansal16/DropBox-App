@@ -111,19 +111,33 @@ def createFolder():
 	return redirect(url_for('index'))
 
 
+
+
 @app.route("/delete_data",methods=['POST'])
 def delete_data():
 	name = request.form['name']
 	parent = request.form['parentPath']
 	username = session['username']
 	data = Files.query.filter(and_(Files.name == name, Files.username == username, Files.parent == parent)).first()
-	print(APP_ROOT)
-	try:
-		db.session.delete(data)
-		db.session.commit()
-		os.remove(APP_ROOT + "/files/" + data.nameWithTS)
-	except:
-		print("Data not fount" + name + parent + username)
+	if data.isFolder == 0:
+		print(APP_ROOT)
+		try:
+			db.session.delete(data)
+			db.session.commit()
+			os.remove(APP_ROOT + "/files/" + data.nameWithTS)
+		except:
+			print("Data not fount" + name + parent + username)
+	else:
+		data1 = Files.query.filter(and_(Files.username == username,Files.parent == (parent + name + "/"))).first()
+		if data1 is None:
+			try:
+				db.session.delete(data)
+				db.session.commit()
+			except:
+				return jsonify({'data':'Something went wrong','error':True})
+		else:
+			return jsonify({'data':"Folder is not empty ",'error':True})
+
 	return getCurrentUserFiles()
 
 
