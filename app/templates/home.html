@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-    <header class="cd-main-header">
+    <header class="cd-main-header" style="z-index: 1000">
         <a href="{{url_for("home")}}" class="cd-logo" style="margin-top: 1%;font-weight: 500;font-size: 30px;text-decoration: none; color: white">DropBox</a>
         
         <div class="cd-search is-hidden">
@@ -51,7 +51,7 @@
     </header> <!-- .cd-main-header -->
 
     <main class="cd-main-content">
-        <nav class="cd-side-nav">
+        <nav class="cd-side-nav" style="z-index: 10">
             <ul>
                 <li class="cd-label">Main</li>
                 <li class="has-children overview">
@@ -88,7 +88,7 @@
             </ul>
 
             <ul>
-                <li class="cd-label">Secondary</li>
+                <li class="cd-label">MY DRIVE</li>
                 <li class="has-children bookmarks">
                     <a href="{{url_for("home")}}">My Files</a>
                     
@@ -98,34 +98,25 @@
                         <li><a href="#">Import Bookmark</a></li>
                     </ul> -->
                 </li>
-                <li class="has-children images">
+                <!-- <li class="has-children images">
                     <a href="#">Images</a>
-                    
-                    <!-- <ul>
-                        <li><a href="#">All Images</a></li>
-                        <li><a href="#">Edit Image</a></li>
-                    </ul> -->
-                </li>
+                </li> -->
 
-                <li class="has-children users">
+                <!-- <li class="has-children users">
                     <a href="#">Users</a>
-                    
-                    <!-- <ul>
-                        <li><a href="#">All Users</a></li>
-                        <li><a href="#">Edit User</a></li>
-                        <li><a href="#">Add User</a></li>
-                    </ul> -->
-                </li>
+                </li> -->
             </ul>
 
-            <ul>
+            <!-- <ul>
                 <li class="cd-label">Action</li>
-                <li class="action-btn"><a href="#">+ Button</a></li>
-            </ul>
+                <li class="action-btn"><a href="#">{{session["totalSize"]}}</a></li>
+            </ul> -->
         </nav>
 
-        <div class="content-wrapper" style="padding-left: 10px">
-            <h1 style="padding-top: 10px;padding-bottom: 10px;font-weight: 500">{{session["path"]}}</h1>
+        <div class="content-wrapper" style="padding-left: 10px;padding-right: 10px">
+            <h2 style="text-align: right;padding: 5px;font-weight: 1000">Drive Usage:  {{session["totalSize"]}}</h2>
+            <h1 style="padding-top: 10px;padding-bottom: 10px;font-weight: 500">
+            {{session["path"]}}</h1>
             <table class="table table-hover table-bordered" style="font-size: 15px;text-align: center;">
                 <thead>
                     <tr style="font-weight: 800">
@@ -151,7 +142,7 @@
                             <td ><a href="#">{{file.name}}</a></td>
                         {% endif %}
                         <td>{{file.username}}</td>
-                        <td>{{file.size}}</td>
+                        <td>{{file.humanReadableSize}}</td>
                         <td>
                           {% if session["username"]==file.username %}
                            <a href="#!" data-dz-remove class="btn-floating ph red white-text waves-effect waves-light"><i class="fa fa-times white-text"></i></i></a>
@@ -160,17 +151,16 @@
                             {% if not file.isFolder %}
                              {% if session["username"]==file.username %}
                                 {% if file.isPublic %}
-                                <a style="background-color: green" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-user white-text"></i></i></a>
+                                <a onclick="changeMe('{{file.name}}',event)" style="background-color: green" href="javascript:void(0)" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i data-path="{{file.parent}}" class="fa fa-user white-text"></i></i></a>
                                     <!-- <a href="#" style="color: green;margin-left: 10px;"><i class="fa fa-user"></i></a> -->
                                 {% else %}
-                                <a style="background-color: orange" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-lock white-text"></i></i></a>
+                                <a onclick="changeMe('{{file.name}}',event)" style="background-color: orange" href="javascript:void(0)" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i data-path="{{file.parent}}" class="fa fa-lock white-text"></i></i></a>
                                     <!-- <a href="#" style="color: orange;margin-left: 10px;"><i class="fa fa-user"></i></a> -->
                                 {% endif %}
                             {% endif %}
                                 <a style="background-color: green" href="{{url_for('download',fname=file.name,parentPath=file.parent,owner=file.username)}}" class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-cloud-download white-text" ></i></i></a>
                                 <!-- <a href="#" style="color: black;margin-left: 10px;"><i class="fa fa-cloud-download"></i></a> -->
                                 <!-- <a href="#" style="color: black;"><i class="fa fa-file-text"></i></a> -->
-                                <a style="background-color: green" href="#!" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-file-text white-text"></i></i></a>
                             {% endif %}
                             <!-- <a class="teal-text"><i class="fa fa-pencil"></i></a> -->
                         </td>

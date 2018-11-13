@@ -71,6 +71,10 @@ def submit(action):
 					session["username"]=request.form["username"]
 					session["path"]="/"
 					user=Users.query.filter(and_(Users.username==request.form["username"],Users.password==hashlib.sha256(request.form["password"].encode()).hexdigest())).first()
+					if user.totalSize:
+						session["totalSize"]=humanReadableSize(user.totalSize);
+					else:
+						session["totalSize"]=humanReadableSize(0)
 					return redirect(url_for("home"))
 			return render_template("index.html",error=True,msg="Invalid userid or password",color="red")
 		elif action=="register":
@@ -82,6 +86,7 @@ def home():
 	if isLoggedIn():
 		# user=Users.query.filter_by(username=session["username"]).first()
 		session["path"]="/"
+		# session["totalSize"]="anuj"
 		files=Files.query.filter(and_(Files.username==session["username"],Files.parent==session["path"])).order_by(Files.name)
 		return render_template("home.html",myfiles=files)
 	else:
@@ -143,6 +148,24 @@ def search():
 			return searchFiles(fName)
 	return jsonify({'data':"Something went wrong",'error':True})	
 
+@app.route("/changeMe",methods=['GET'])
+def changeMe():
+	# print("--------------adsd")
+	fname=request.args.get("fname").strip()
+	if fname:
+		parentPath=request.args.get("parentPath").strip()
+		myfile=Files.query.filter(and_(Files.name==fname,Files.username==session["username"],Files.parent==parentPath)).first()
+		if myfile:
+			try:
+				if myfile.isPublic:
+					myfile.isPublic=False
+				else:
+					myfile.isPublic=True
+				db.session.commit()
+			except Exception as e:
+				return jsonify({'data':str(e),'error':True})
+	return jsonify({'data':'success','error':False})
+
 @app.route("/download", methods=['GET'])
 def download():
 	if isLoggedIn():
@@ -170,13 +193,20 @@ def upload():
 				currentT=str(currentT)
 				oFileName=file.filename
 				filename =currentT+file.filename
-				fileD=Files(oFileName,session['username'],session['path'],11,0,0,filename)
+				fileD=Files(oFileName,session['username'],session['path'],0,0,0,filename,"0B")
 				print("-----------------------------")
 				print(filename)	
 				try:
 					db.session.add(fileD)
 					db.session.commit()
 					file.save(os.path.join(APP_ROOT+"/"+uploadFolder+"/", filename))
+					fileD.size=os.stat(os.path.join(APP_ROOT+"/"+uploadFolder+"/", filename)).st_size
+					fileD.humanReadableSize=humanReadableSize(fileD.size)
+					if not fileD.users.totalSize:
+						fileD.users.totalSize=0	
+					fileD.users.totalSize+=fileD.size
+					session["totalSize"]=humanReadableSize(fileD.users.totalSize)
+					db.session.commit()
 				except Exception as e:
 					if 'IntegrityError' in str(e):
 						return jsonify({'data':"File already exist (delete exising file first)",'error':True})
@@ -209,3 +239,16 @@ def register(request):
 @app.errorhandler(404)
 def http_404_handler(error):
 	return render_template('error404.html')
+
+def humanReadableSize(var):
+	unit ="B"
+	if var > 1000:
+		var = var/1000.0
+		unit = "KB"
+	if var > 1000:
+		var = var/1000.0
+		unit = "MB"
+	if var > 1000:
+		var = var/1000.0
+		unit = "GB"
+	return str(round(var,2)) + ' ' + unit

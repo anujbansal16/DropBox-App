@@ -168,6 +168,28 @@ function openFolder(x,e){
 
  }
 
+function changeMe(x,e){
+		path=e.target.getAttribute("data-path");
+		// alert(path);
+		// console.log(e.target);
+		if ($(e.target).parent().css("background-color")=="rgb(255, 165, 0)"){
+				$(e.target).removeClass("fa fa-lock white-text");
+				$(e.target).addClass("fa fa-user white-text");
+				$(e.target).parent().css("background-color","green");
+			}
+		else{
+			$(e.target).removeClass("fa fa-user white-text");
+			$(e.target).addClass("fa fa-lock white-text");
+			$(e.target).parent().css("background-color","orange");	
+		}
+       $.get("/changeMe",{fname: x, parentPath: path },function(result){
+			if(result.error){
+				alert(result.data);
+			}
+		}); 
+
+ }
+
  function goBack() {
 	$.get("/goBack",function(result){
 					if (result.error){
