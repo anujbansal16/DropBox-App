@@ -124,7 +124,7 @@ def delete_data():
 		try:
 			db.session.delete(data)
 			db.session.commit()
-			os.remove(APP_ROOT + "/files/" + data.nameWithTS)
+			os.remove(APP_ROOT + "/" + uploadFolder + "/" + data.nameWithTS)
 		except:
 			print("Data not fount" + name + parent + username)
 	else:
