@@ -150,6 +150,35 @@ def delete_data():
 
 	return getCurrentUserFiles()
 
+@app.route("/move_file",methods=['POST'])
+def move_file():
+	if isLoggedIn():
+		oldPath = request.form['parentPath']
+		fileName = request.form['fname']
+		newPath = request.form['moveToPath']
+		
+		chkPath = newPath[0:newPath.rfind("/")+1]
+		folderName = newPath[newPath.rfind("/")+1:]
+
+		print(chkPath)
+		print(folderName)
+
+		username = session['username']
+		data = Files.query.filter(and_(Files.username == username, Files.parent == chkPath,Files.name == folderName)).first()
+		if data:
+			 try:
+			 	data = Files.query.filter(and_(Files.username == username,Files.name == fileName,Files.parent == oldPath)).first()
+			 	data.parent = newPath + "/"
+			 	db.session.commit()
+ 				return getCurrentUserFiles()
+			 except Exception as e:
+			 	if 'IntegrityError' in str(e):
+						return jsonify({'data':"File already exist (delete exising file first)",'error':True})
+			 	return jsonify({'data':'Something went wrong','error':True})
+		else:
+			return jsonify({'data':'Not a valid path','error':True})	 		
+	return jsonify({'data':'Something went wrong','error':True})
+
 
 @app.route("/openFolder",methods=['POST'])
 def openFolder():

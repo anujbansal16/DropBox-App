@@ -190,6 +190,17 @@ function changeMe(x,e){
 
  }
 
+function moveFile(x,e){
+	path=e.target.getAttribute("data-path");
+	var newPath = prompt(path)
+	$.post("/move_file",{fname: x, parentPath: path, moveToPath: newPath },function(result){
+		if(result.error){
+			alert(result.data);
+		}
+		else
+			$('.content-wrapper').html(result.data);
+	});
+}
 
 function del_data(x,e) {
 

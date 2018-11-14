@@ -145,7 +145,7 @@
                         <td>{{file.humanReadableSize}}</td>
                         <td>
                           {% if session["username"]==file.username %}
-                           <a href="javascript:void(0)" onclick = "del_data('{{file.name}}','{{file.parent}}')" data-dz-remove class="btn-floating ph red white-text waves-effect waves-light"><i class="fa fa-times white-text"></i></i></a>
+                           <a title = "Delete" href="javascript:void(0)" onclick = "del_data('{{file.name}}','{{file.parent}}')" data-dz-remove class="btn-floating ph red white-text waves-effect waves-light"><i class="fa fa-times white-text"></i></i></a>
                           {% endif %}
 
                             {% if not file.isFolder %}
@@ -157,8 +157,9 @@
                                 <a onclick="changeMe('{{file.name}}',event)" style="background-color: orange" href="javascript:void(0)" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i data-path="{{file.parent}}" class="fa fa-lock white-text"></i></i></a>
                                     <!-- <a href="#" style="color: orange;margin-left: 10px;"><i class="fa fa-user"></i></a> -->
                                 {% endif %}
+                            <a  title="Move" onclick="moveFile('{{file.name}}',event)" style="background-color: blue" href="javascript:void(0)" data-dz-remove class="btn-floating ph  white-text waves-effect waves-light"><i data-path="{{file.parent}}" class="fa fa-send white-text"></i></i></a>    
                             {% endif %}
-                                <a style="background-color: green" href="{{url_for('download',fname=file.name,parentPath=file.parent,owner=file.username)}}" class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-cloud-download white-text" ></i></i></a>
+                                <a title = "Download" style="background-color: green" href="{{url_for('download',fname=file.name,parentPath=file.parent,owner=file.username)}}" class="btn-floating ph  white-text waves-effect waves-light"><i class="fa fa-cloud-download white-text" ></i></i></a>
                                 <!-- <a href="#" style="color: black;margin-left: 10px;"><i class="fa fa-cloud-download"></i></a> -->
                                 <!-- <a href="#" style="color: black;"><i class="fa fa-file-text"></i></a> -->
                             {% endif %}
