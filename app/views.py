@@ -246,9 +246,28 @@ def download():
 				myfile=Files.query.filter(and_(Files.name==fname,Files.username==owner,Files.isPublic==True,Files.parent==parentPath)).first()
 			if myfile:
 				uploads = os.path.join(APP_ROOT+"/",uploadFolder+"/")
-				return send_from_directory(directory=uploads, filename=myfile.nameWithTS, as_attachment=True)
+				return send_from_directory(directory=uploads, filename=myfile.nameWithTS, attachment_filename=fname,as_attachment=True)
 	return redirect(url_for('index'))
-	
+
+
+@app.route("/open", methods=['GET'])
+def open():
+	if isLoggedIn():
+		fname=request.args.get("fname").strip()
+		if fname:
+			parentPath=request.args.get("parentPath").strip()
+			owner=request.args.get("owner").strip()
+			print("--------------------")
+			print(fname+" "+owner+" "+parentPath)
+			if owner==session["username"]:
+				myfile=Files.query.filter(and_(Files.name==fname,Files.username==owner,Files.parent==parentPath)).first()
+			else:
+				myfile=Files.query.filter(and_(Files.name==fname,Files.username==owner,Files.isPublic==True,Files.parent==parentPath)).first()
+			if myfile:
+				uploads = os.path.join(APP_ROOT+"/",uploadFolder+"/")
+				return send_from_directory(directory=uploads, filename=myfile.nameWithTS, attachment_filename=fname)
+	return redirect(url_for('index'))
+
 @app.route("/upload",methods=['POST'])
 def upload():
 	if isLoggedIn:
