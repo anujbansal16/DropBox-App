@@ -190,7 +190,20 @@ function changeMe(x,e){
 
  }
 
- function goBack() {
+
+function del_data(x,e) {
+
+	$.post("/delete_data",{name : x, parentPath : e},function(result) {
+		if (result.error){
+			alert(result.data);
+		}
+		else
+			$('.content-wrapper').html(result.data);
+	});
+}
+
+
+function goBack() {
 	$.get("/goBack",function(result){
 					if (result.error){
 						alert(result.data);
