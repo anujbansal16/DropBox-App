@@ -1,7 +1,7 @@
 import os
 import time
 from flask import render_template
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from sqlalchemy import desc
 import hashlib 
 from flask import url_for, redirect, request, make_response,flash
