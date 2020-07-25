@@ -54,7 +54,7 @@ def index():
 @app.route('/logout')
 def logout():
 	session.pop('username', None)
-   	return redirect(url_for('index'))
+	return redirect(url_for('index'))
 	
 
 @app.route("/register")
