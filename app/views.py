@@ -310,7 +310,7 @@ def register(request):
 	elif password!=repeat_pass:
 		return render_template('register.html',error=True,msg="Error: Both password doesn't matches.",color="red")
 	
-	if Users.query.filter(or_(Users.username=username,Users.email=email)).first():
+	if Users.query.filter(or_(Users.username==username,Users.email==email)).first():
 		return render_template('register.html',error=True,msg="Error: User already exist with entered username or email ", color="red")
 	else:
 		password=hashlib.sha256(password.encode()).hexdigest()
